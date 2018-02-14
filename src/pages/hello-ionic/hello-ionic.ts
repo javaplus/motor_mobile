@@ -10,6 +10,7 @@ export class HelloIonicPage {
   httpClient : HttpClient;
   motorResponse: Observable<any>;
   lastDirection: string
+  speed : string
 
   constructor(public httpClientParm: HttpClient) {
     this.httpClient = httpClientParm;
@@ -35,6 +36,24 @@ export class HelloIonicPage {
     .subscribe(data => {
       console.log('response=', data);
       this.lastDirection = dir;
+    });
+
+  }
+  timedMove(event, direction, pspeed, time) {
+    // alert(name + " is super cool!");
+    let vector = {
+      "direction": direction,
+      "speed" : this.speed,
+      "time": time
+    }
+    let body = JSON.stringify(vector);
+    console.log(body);
+    this.motorResponse = this.httpClient.post('http://localhost:5000/move', body, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    this.motorResponse
+    .subscribe(data => {
+      console.log('response=', data);
     });
 
   }
