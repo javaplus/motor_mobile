@@ -1,6 +1,9 @@
 # motor_mobile
 
 How to package to mobile:
+
+https://ionicframework.com/docs/intro/deploying/
+
 ionic cordova build android --prod --release
 
 
