@@ -43,7 +43,7 @@ export class HelloIonicPage {
     // alert(name + " is super cool!");
     let vector = {
       "direction": direction,
-      "speed" : speed,
+      "speed" : `${speed}`,
       "time": time
     }
     let body = JSON.stringify(vector);
