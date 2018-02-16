@@ -10,7 +10,7 @@ export class HelloIonicPage {
   httpClient : HttpClient;
   motorResponse: Observable<any>;
   lastDirection: string
-  speed : string
+  
 
   constructor(public httpClientParm: HttpClient) {
     this.httpClient = httpClientParm;
@@ -19,7 +19,7 @@ export class HelloIonicPage {
 
   test(event, name) {
     // alert(name + " is super cool!");
-    this.motorResponse = this.httpClient.get('http://192.168.1.122:5000/test/' + name);
+    this.motorResponse = this.httpClient.get('http://192.168.0.50:5000/test/' + name);
     this.motorResponse
     .subscribe(data => {
       console.log('response=', data);
@@ -31,7 +31,7 @@ export class HelloIonicPage {
     // alert(name + " is super cool!");
     let dir = speed>0?direction:this.lastDirection; // set dir to last direction if speed is zero
     let vector = dir + speed +'E';
-    this.motorResponse = this.httpClient.get('http://192.168.1.122:5000/forward/' + vector);
+    this.motorResponse = this.httpClient.get('http://192.168.0.50:5000/forward/' + vector);
     this.motorResponse
     .subscribe(data => {
       console.log('response=', data);
@@ -39,16 +39,16 @@ export class HelloIonicPage {
     });
 
   }
-  timedMove(event, direction, pspeed, time) {
+  timedMove(event, direction, speed, time) {
     // alert(name + " is super cool!");
     let vector = {
       "direction": direction,
-      "speed" : this.speed,
+      "speed" : speed,
       "time": time
     }
     let body = JSON.stringify(vector);
     console.log(body);
-    this.motorResponse = this.httpClient.post('http://localhost:5000/move', body, {
+    this.motorResponse = this.httpClient.post('http://192.168.0.50:5000/move', body, {
       headers: { 'Content-Type': 'application/json' }
     });
     this.motorResponse

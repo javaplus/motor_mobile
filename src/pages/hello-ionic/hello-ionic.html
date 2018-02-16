@@ -25,13 +25,33 @@
   </p>
 <p>
   <ion-item>
-    <ion-label>Todo</ion-label>
-    <ion-input type="text" [(ngModel)]="speed" name="speed"></ion-input>
+    <ion-label>Speed</ion-label>
+    <ion-input type="text" #speed name="speed"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Time</ion-label>
+    <ion-input type="text" #time name="time"></ion-input>
   </ion-item>
 </p>
 <p>
-  <button ion-button color="primary" (click)="timedMove($event,'42', '0', '12')">Timed Move</button>
+  <button ion-button color="primary" (click)="timedMove($event,'5', speed.value, time.value)">Timed Move A</button>
 </p>
+
+
+<p>
+  <ion-item>
+    <ion-label>Speed</ion-label>
+    <ion-input type="text" #speed2 name="speed2"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Time</ion-label>
+    <ion-input type="text" #time2 name="time2"></ion-input>
+  </ion-item>
+</p>
+<p>
+  <button ion-button color="primary" (click)="timedMove($event,'6', speed2.value, time2.value)">Timed Move B</button>
+</p>
+
 
 
 </ion-content>
