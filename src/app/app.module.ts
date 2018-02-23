@@ -4,7 +4,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
+//import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
+import { TreeControlPage } from '../pages/tree-control/tree-control';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { ListPage } from '../pages/list/list';
 
@@ -14,7 +15,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 @NgModule({
   declarations: [
     MyApp,
-    HelloIonicPage,
+    //HelloIonicPage,
+    TreeControlPage,
     ItemDetailsPage,
     ListPage
   ],
@@ -26,7 +28,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HelloIonicPage,
+    TreeControlPage,
     ItemDetailsPage,
     ListPage
   ],
