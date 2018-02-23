@@ -12,7 +12,7 @@
 <h3>Choose the speed and time in Seconds to run. </h3>
   <div class="SpeedGroup">
   <p>
-    <button ion-button color="primary" (click)="timedMove($event,'5', speed.value, time.value)">Scene 1</button>
+    <button ion-button color="primary" (click)="moveForScene($event,'scene1')">Scene 1</button>
   </p>
 </div>
 <br>
@@ -22,20 +22,10 @@
   </p>
  </div> 
 
-  <h3>Always Stop before switiching directions</h3>
-
+ <div class="SpeedGroup">  
   <p>
-    <button ion-button color="primary" (click)="move($event,'5', '255')">Right Full Speed</button>
+    <button ion-button color="primary" (click)="timedMove($event,'6', speed2.value, time2.value)">Scene 2</button>
   </p>
-
-  <p>
-    <button ion-button color="primary" (click)="move($event,'6', '255')">Left Full Speed</button>
-  </p>
-
-  <p>
-    <button ion-button color="primary" (click)="move($event,'42', '0')">stop</button>
-  </p>
-
-
+ </div> 
 
 </ion-content>

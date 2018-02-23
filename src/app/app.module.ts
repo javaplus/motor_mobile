@@ -3,6 +3,8 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
+// add storage
+import { IonicStorageModule } from '@ionic/storage';
 
 //import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { TreeControlPage } from '../pages/tree-control/tree-control';
@@ -23,6 +25,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     HttpClientModule
   ],
   bootstrap: [IonicApp],

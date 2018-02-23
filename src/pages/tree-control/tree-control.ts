@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-tree-control',
@@ -10,11 +11,34 @@ export class TreeControlPage {
   httpClient : HttpClient;
   motorResponse: Observable<any>;
   lastDirection: string
+  myStorage: Storage
   
 
-  constructor(public httpClientParm: HttpClient) {
+  constructor(public httpClientParm: HttpClient, private storage: Storage) {
     this.httpClient = httpClientParm;
-    this.lastDirection = '5'
+    this.lastDirection = '5';
+    this.myStorage = storage;
+    // initialize myStorage
+    let scene1 = {
+        "movements":[
+          {
+            "motor":"1",
+            "dir":"5",
+            "speed" : "255",
+            "time" : "13"
+          },
+          {
+            "motor":"2",
+            "dir":"6",
+            "speed" : "255",
+            "time" : "10"
+          } 
+        ]
+     }
+     this.myStorage.set("scene1", scene1);
+     this.myStorage.set("motorURL1", "http://192.168.0.50:5000/move");
+     this.myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
+
   }
 
   test(event, name) {
@@ -57,4 +81,41 @@ export class TreeControlPage {
     });
 
   }
+  moveForScene(event, sceneName) {
+    this.myStorage.get(sceneName).then((scenedetails) => {
+      console.log(scenedetails);
+      scenedetails.movements.forEach(movement => {
+        this.processMovement(movement);
+      });
+    });
+
+    
+    
+  }
+
+  processMovement(movement){
+    let vector = {
+      "direction": movement.dir,
+      "speed" : `${movement.speed}`,
+      "time": movement.time
+    }
+    // get motor url then call API
+    let body = JSON.stringify(vector);
+    console.log(body);
+    this.callMotorAPI(movement.motor, body);
+        
+  }
+
+  callMotorAPI(motorNum, body){
+    let motorURL = "NA";
+    this.myStorage.get("motorURL"+motorNum).then((motorURL) => {
+      this.httpClient.post(motorURL, body, {
+        headers: { 'Content-Type': 'application/json' }
+      }).subscribe(data => {
+        console.log('response=', data);
+      });
+   });
+
+  }
+
 }
