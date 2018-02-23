@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'scene-settings',
-  templateUrl: 'hello-ionic.html'
+  templateUrl: 'scene-settings.html'
 })
-export class HelloIonicPage {
+export class SceneSettingsPage {
   httpClient : HttpClient;
   motorResponse: Observable<any>;
   lastDirection: string

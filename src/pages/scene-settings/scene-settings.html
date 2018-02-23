@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Prop Mover</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+<h3>Choose the speed and time in Seconds to run. </h3>
+  <div class="SpeedGroup">
+  <p>
+      <ion-item>
+          <ion-label>Speed </ion-label>
+          <ion-range min="50" max="255" step="5" snaps="true" color="secondary" #speed>
+              <ion-label range-left>50</ion-label>
+              <ion-label range-right>MAX</ion-label>
+          </ion-range>
+        </ion-item>
+    <ion-item>
+      <ion-label>Time(in Seconds):</ion-label>
+      <ion-input type="text" #time name="time"></ion-input>
+    </ion-item>
+  </p>
+  <p>
+    <button ion-button color="primary" (click)="timedMove($event,'5', speed.value, time.value)">Timed Move A</button>
+  </p>
+</div>
+<br>
+<div class="SpeedGroup">  
+  <p>
+    <!-- <ion-item>
+      <ion-label>Speed:</ion-label>
+      <ion-input type="text" #speed2 name="speed2"></ion-input>
+    </ion-item>-->
+    <ion-item>
+        <ion-label>Speed </ion-label>
+        <ion-range min="50" max="255" step="5" snaps="true" color="secondary" #speed2>
+            <ion-label range-left>50</ion-label>
+            <ion-label range-right>MAX</ion-label>
+        </ion-range>
+      </ion-item>
+    <ion-item>
+      <ion-label>Time(in Seconds):</ion-label>
+      <ion-input type="text" #time2 name="time2"></ion-input>
+    </ion-item>
+  </p>
+  <p>
+    <button ion-button color="primary" (click)="timedMove($event,'6', speed2.value, time2.value)">Timed Move B</button>
+  </p>
+ </div> 
+
+  <h3>Always Stop before switiching directions</h3>
+
+  <p>
+    <button ion-button color="primary" (click)="move($event,'5', '255')">Right Full Speed</button>
+  </p>
+
+  <p>
+    <button ion-button color="primary" (click)="move($event,'6', '255')">Left Full Speed</button>
+  </p>
+
+  <p>
+    <button ion-button color="primary" (click)="move($event,'42', '0')">stop</button>
+  </p>
+
+
+
+</ion-content>
