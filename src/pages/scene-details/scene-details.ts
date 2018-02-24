@@ -26,4 +26,8 @@ export class SceneDetailsPage {
 
     });
   }
+  save(event) {
+    // alert(name + " is super cool!");
+    console.log(this.selectedScene);
+  }
 }
