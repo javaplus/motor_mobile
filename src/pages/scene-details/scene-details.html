@@ -7,28 +7,30 @@
     </ion-navbar>
   </ion-header>
 <ion-content>
-  <h3 text-center *ngIf="selectedScene">
-    <b>MOTOR: {{selectedScene.motor}}</b>
-  </h3>
-  <h4 text-center *ngIf="selectedScene">
-    <b>SPEED: {{selectedScene.speed}}</b>
-  </h4>
   <h3>Choose the speed and time in Seconds to run. </h3>
-  <div class="SpeedGroup">
-  <p>
-    <ion-item>
-        <ion-label>Speed </ion-label>
-        <ion-range *ngIf="selectedScene" min="50" max="255" step="5" snaps="true" color="secondary" [(ngModel)]="selectedScene.speed">
-            <ion-label range-left>50</ion-label>
-            <ion-label range-right>MAX</ion-label>
-        </ion-range>
-    </ion-item>
-    <ion-item>
-      <ion-label>Time(in Seconds):</ion-label>
-      <ion-input *ngIf="selectedScene" [(ngModel)]="selectedScene.time" type="text" name="time"></ion-input>
-    </ion-item>
-  </p>
-  <p>
+  <div *ngIf="selectedScene">
+    <div class="SpeedGroup" *ngFor="let movement of selectedScene.movements">
+        <h3 text-center *ngIf="movement">
+            <b>MOTOR: {{movement.motor}}</b>
+          </h3>
+          <h4 text-center *ngIf="movement">
+            <b>SPEED: {{movement.speed}}</b>
+          </h4>
+    <p>
+      <ion-item>
+          <ion-label>Speed </ion-label>
+          <ion-range *ngIf="movement" min="50" max="255" step="5" snaps="true" color="secondary" [(ngModel)]="movement.speed">
+              <ion-label range-left>50</ion-label>
+              <ion-label range-right>MAX</ion-label>
+          </ion-range>
+      </ion-item>
+      <ion-item>
+        <ion-label>Time(in Seconds):</ion-label>
+        <ion-input *ngIf="movement" [(ngModel)]="movement.time" type="text" name="time"></ion-input>
+      </ion-item>
+    </p>
+   </div>
+   <p>
       <button ion-button color="primary" (click)="save($event)">Save</button>
     </p>
 </div>

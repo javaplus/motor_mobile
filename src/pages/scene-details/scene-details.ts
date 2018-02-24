@@ -21,7 +21,7 @@ export class SceneDetailsPage {
     this.myStorage.get(sceneName).then((sceneData) =>{
       console.log(sceneData);
 
-      this.selectedScene = sceneData.movements[0];
+      this.selectedScene = sceneData;
 
 
     });
