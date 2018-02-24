@@ -15,30 +15,39 @@ export class TreeControlPage {
   
 
   constructor(public httpClientParm: HttpClient, private storage: Storage) {
+    console.log("in TreeControl Page constructor");
     this.httpClient = httpClientParm;
     this.lastDirection = '5';
     this.myStorage = storage;
-    // initialize myStorage
-    let scene1 = {
-        "movements":[
-          {
-            "motor":"1",
-            "dir":"5",
-            "speed" : "255",
-            "time" : "13"
-          },
-          {
-            "motor":"2",
-            "dir":"6",
-            "speed" : "255",
-            "time" : "10"
-          } 
-        ]
-     }
-     this.myStorage.set("scene1", scene1);
-     this.myStorage.set("motorURL1", "http://192.168.0.50:5000/move");
-     this.myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
+    TreeControlPage.initializeSceneData(this.myStorage);
+    
+  }
 
+  static initializeSceneData(myStorage){
+    // try to get scene data
+    myStorage.get("scene1").then((scene1Data)=>{
+      if(!scene1Data){
+        let scene1 = {
+          "movements":[
+            {
+              "motor":"1",
+              "dir":"5",
+              "speed" : "255",
+              "time" : "13"
+            },
+            {
+              "motor":"2",
+              "dir":"6",
+              "speed" : "255",
+              "time" : "10"
+            } 
+          ]
+       }
+       myStorage.set("scene1", scene1);
+      }
+    });
+    myStorage.set("motorURL1", "http://192.168.0.50:5000/move");
+    myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
   }
 
   test(event, name) {

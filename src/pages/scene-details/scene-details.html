@@ -16,7 +16,7 @@
           <h4 text-center *ngIf="movement">
             <b>SPEED: {{movement.speed}}</b>
           </h4>
-    <p>
+      <p>
       <ion-item>
           <ion-label>Speed </ion-label>
           <ion-range *ngIf="movement" min="50" max="255" step="5" snaps="true" color="secondary" [(ngModel)]="movement.speed">
@@ -28,7 +28,12 @@
         <ion-label>Time(in Seconds):</ion-label>
         <ion-input *ngIf="movement" [(ngModel)]="movement.time" type="text" name="time"></ion-input>
       </ion-item>
+      <ion-item>
+          <ion-label>Direction:</ion-label>
+          <ion-input *ngIf="movement" [(ngModel)]="movement.dir" type="text" name="dir"></ion-input>
+        </ion-item>
     </p>
+
    </div>
    <p>
       <button ion-button color="primary" (click)="save($event)">Save</button>

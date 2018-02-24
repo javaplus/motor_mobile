@@ -11,14 +11,15 @@ import { Storage } from '@ionic/storage';
 export class SceneDetailsPage {
   selectedScene: any;
   myStorage: Storage;
+  sceneName : string
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage) {
     this.myStorage = storage;
     // If we navigated to this page, we will have an item available as a nav param
-    let sceneName = navParams.get('scene');
+    this.sceneName = navParams.get('scene');
     //let thescene = "scene1";
-    console.log(sceneName);
-    this.myStorage.get(sceneName).then((sceneData) =>{
+    console.log(this.sceneName);
+    this.myStorage.get(this.sceneName).then((sceneData) =>{
       console.log(sceneData);
 
       this.selectedScene = sceneData;
@@ -29,5 +30,7 @@ export class SceneDetailsPage {
   save(event) {
     // alert(name + " is super cool!");
     console.log(this.selectedScene);
+    // let's write the updates back to storage.
+    this.myStorage.set(this.sceneName, this.selectedScene);
   }
 }
