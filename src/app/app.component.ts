@@ -4,6 +4,7 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 import { TreeControlPage } from '../pages/tree-control/tree-control';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ListPage } from '../pages/list/list';
+import { SceneDetailsPage } from '../pages/scene-details/scene-details';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -18,7 +19,7 @@ export class MyApp {
 
   // make TreeControlPage the root (or first) page
   rootPage = TreeControlPage;
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any, context: string}>;
 
   constructor(
     public platform: Platform,
@@ -30,8 +31,9 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'Tree Control', component: TreeControlPage },
-      { title: 'Settings', component: ListPage }
+      { title: 'Tree Control', component: TreeControlPage, context: "home" },
+      { title: 'Scene 1 Config', component: SceneDetailsPage, context: "scene1" },
+      { title: 'Scene 2 Config', component: SceneDetailsPage, context: "scene2" }
     ];
   }
 
@@ -48,6 +50,6 @@ export class MyApp {
     // close the menu when clicking a link from the menu
     this.menu.close();
     // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
+    this.nav.setRoot(page.component, {"scene" : page.context});
   }
 }
