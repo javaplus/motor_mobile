@@ -12,6 +12,7 @@ export class TreeControlPage {
   motorResponse: Observable<any>;
   lastDirection: string
   myStorage: Storage
+  static sceneNameList = new Array("scene1", "scene2", "scene3", "scene4");
   
 
   constructor(public httpClientParm: HttpClient, private storage: Storage) {
@@ -20,34 +21,50 @@ export class TreeControlPage {
     this.lastDirection = '5';
     this.myStorage = storage;
     TreeControlPage.initializeSceneData(this.myStorage);
-    
   }
 
   static initializeSceneData(myStorage){
     // try to get scene data
-    myStorage.get("scene1").then((scene1Data)=>{
-      if(!scene1Data){
-        let scene1 = {
-          "movements":[
-            {
-              "motor":"1",
-              "dir":"5",
-              "speed" : "255",
-              "time" : "13"
-            },
-            {
-              "motor":"2",
-              "dir":"6",
-              "speed" : "255",
-              "time" : "10"
-            } 
-          ]
-       }
-       myStorage.set("scene1", scene1);
-      }
+    TreeControlPage.sceneNameList.forEach(sceneName => {
+      myStorage.get(sceneName).then((sceneData)=>{
+        if(!sceneData){
+          let sceneStuff = {
+            "movements":[
+              {
+                "motor":"1",
+                "dir":"5",
+                "speed" : "255",
+                "time" : "13"
+              },
+              {
+                "motor":"2",
+                "dir":"6",
+                "speed" : "255",
+                "time" : "10"
+              }, 
+              {
+                "motor":"3",
+                "dir":"6",
+                "speed" : "255",
+                "time" : "10"
+              },               
+              {
+                "motor":"4",
+                "dir":"6",
+                "speed" : "255",
+                "time" : "10"
+              }
+            ]
+         }
+         myStorage.set(sceneName, sceneStuff);
+        }
+      });
+      
     });
     myStorage.set("motorURL1", "http://192.168.0.50:5000/move");
     myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
+    myStorage.set("motorURL3", "http://192.168.0.54:5000/move");
+    myStorage.set("motorURL4", "http://192.168.0.56:5000/move");
   }
 
   test(event, name) {

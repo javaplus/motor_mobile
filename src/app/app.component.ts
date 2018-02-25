@@ -31,7 +31,9 @@ export class MyApp {
     this.pages = [
       { title: 'Tree Control', component: TreeControlPage, context: "home" },
       { title: 'Scene 1 Config', component: SceneDetailsPage, context: "scene1" },
-      { title: 'Scene 2 Config', component: SceneDetailsPage, context: "scene2" }
+      { title: 'Scene 2 Config', component: SceneDetailsPage, context: "scene2" },
+      { title: 'Scene 3 Config', component: SceneDetailsPage, context: "scene3" },
+      { title: 'Scene 4 Config', component: SceneDetailsPage, context: "scene4" }
     ];
   }
 
