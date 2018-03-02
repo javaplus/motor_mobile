@@ -50,7 +50,7 @@ export class TreeControlPage {
         "dir":"5",
         "speed" : "255",
         "time" : "13",
-        "isDisabled" : "true"
+        "isDisabled" : true
       };
     }
     console.log(sceneStuff);

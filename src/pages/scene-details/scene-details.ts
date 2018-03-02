@@ -39,11 +39,11 @@ export class SceneDetailsPage {
     // let's write the updates back to storage.
     this.myStorage.set(this.sceneName, this.selectedScene);
     //this.mytoast.show("Settings Saved!!!", 'long', 'center');
-    this.mytoast.show(`Scene Settings Saved!!!`, '4000', 'center').subscribe(
+    /*this.mytoast.show(`Scene Settings Saved!!!`, '4000', 'center').subscribe(
       toast => {
         //console.log(toast);
       }
-    );
+    );*/
     this.nav.setRoot(TreeControlPage, {"scene" : "home"});
   }
 }
