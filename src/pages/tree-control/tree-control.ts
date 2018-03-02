@@ -38,7 +38,7 @@ export class TreeControlPage {
     myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
     myStorage.set("motorURL3", "http://192.168.0.54:5000/move");
     myStorage.set("motorURL4", "http://192.168.0.56:5000/move");
-    myStorage.set("motorURL4", "http://192.168.0.58:5000/move");
+    myStorage.set("motorURL5", "http://192.168.0.58:5000/move");
   }
 
   static initMotorData(numOfMotors){
