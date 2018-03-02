@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import { Toast } from '@ionic-native/toast';
 
 @Component({
   selector: 'page-tree-control',
@@ -12,14 +13,16 @@ export class TreeControlPage {
   motorResponse: Observable<any>;
   lastDirection: string
   myStorage: Storage
+  mytoast: Toast;
   static sceneNameList = new Array("scene1", "scene2", "scene3", "scene4");
   
 
-  constructor(public httpClientParm: HttpClient, private storage: Storage) {
+  constructor(public httpClientParm: HttpClient, private storage: Storage, private toast: Toast) {
     console.log("in TreeControl Page constructor");
     this.httpClient = httpClientParm;
     this.lastDirection = '5';
     this.myStorage = storage;
+    this.mytoast = toast;
     TreeControlPage.initializeSceneData(this.myStorage);
   }
 
@@ -106,6 +109,11 @@ export class TreeControlPage {
         }
       });
     });
+    this.mytoast.show(`Step Instructions sent!!!`, '4000', 'center').subscribe(
+      toast => {
+        //console.log(toast);
+      }
+    );
 
     
     
