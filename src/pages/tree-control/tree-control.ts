@@ -28,34 +28,7 @@ export class TreeControlPage {
     TreeControlPage.sceneNameList.forEach(sceneName => {
       myStorage.get(sceneName).then((sceneData)=>{
         if(!sceneData){
-          let sceneStuff = {
-            "movements":[
-              {
-                "motor":"1",
-                "dir":"5",
-                "speed" : "255",
-                "time" : "13"
-              },
-              {
-                "motor":"2",
-                "dir":"6",
-                "speed" : "255",
-                "time" : "10"
-              }, 
-              {
-                "motor":"3",
-                "dir":"6",
-                "speed" : "255",
-                "time" : "10"
-              },               
-              {
-                "motor":"4",
-                "dir":"6",
-                "speed" : "255",
-                "time" : "10"
-              }
-            ]
-         }
+          let sceneStuff = TreeControlPage.initMotorData(5);
          myStorage.set(sceneName, sceneStuff);
         }
       });
@@ -65,8 +38,25 @@ export class TreeControlPage {
     myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
     myStorage.set("motorURL3", "http://192.168.0.54:5000/move");
     myStorage.set("motorURL4", "http://192.168.0.56:5000/move");
+    myStorage.set("motorURL4", "http://192.168.0.58:5000/move");
   }
 
+  static initMotorData(numOfMotors){
+    let sceneStuff = {"movements":[]};
+
+    for (let index = 0; index < numOfMotors; index++) {
+      sceneStuff.movements[index] =     {
+        "motor": `${index+1}`,
+        "dir":"5",
+        "speed" : "255",
+        "time" : "13",
+        "isDisabled" : "true"
+      };
+    }
+    console.log(sceneStuff);
+    return sceneStuff;
+    
+  }
   test(event, name) {
     // alert(name + " is super cool!");
     this.motorResponse = this.httpClient.get('http://192.168.0.50:5000/test/' + name);
@@ -111,7 +101,9 @@ export class TreeControlPage {
     this.myStorage.get(sceneName).then((scenedetails) => {
       console.log(scenedetails);
       scenedetails.movements.forEach(movement => {
-        this.processMovement(movement);
+        if(movement.isDisabled==false){
+         this.processMovement(movement);
+        }
       });
     });
 

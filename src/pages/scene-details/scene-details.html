@@ -9,7 +9,12 @@
 <ion-content>
   <h3>Choose the speed and time in Seconds to run. </h3>
   <div *ngIf="selectedScene">
-    <div class="SpeedGroup" *ngFor="let movement of selectedScene.movements">
+    <div class="SpeedGroup" *ngFor="let movement of selectedScene.movements" >
+        <ion-item>
+            <ion-label>Disable</ion-label>
+            <ion-checkbox [(ngModel)]="movement.isDisabled" checked="movement.isDisabled==null"></ion-checkbox>
+          </ion-item>
+      <div class="DetailsGroup" [attr.disabled]="movement.isDisabled=='true'? true:null">
         <h3 text-center *ngIf="movement">
             <b>MOTOR: {{movement.motor}}</b>
           </h3>
@@ -42,7 +47,7 @@
             </ion-item>
           </ion-list>
     </p>
-
+  </div>
    </div>
    <p>
       <button ion-button color="primary" (click)="save($event)">Save</button>

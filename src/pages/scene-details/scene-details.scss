@@ -1,3 +1,9 @@
 page-scene-details {
     div.SpeedGroup{border-style: solid;}
+    
+    div.DetailsGroup[disabled]{       
+        cursor: default;
+         opacity: .4;
+        pointer-events:none;
+    }    
 }
