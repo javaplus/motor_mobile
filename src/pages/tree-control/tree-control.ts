@@ -14,6 +14,7 @@ export class TreeControlPage {
   lastDirection: string
   myStorage: Storage
   mytoast: Toast;
+  sceneButtonInfo: Map<string, boolean>;
   static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7","step8", "step9", "step10", "step11","step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21" );
   
 
@@ -24,6 +25,21 @@ export class TreeControlPage {
     this.myStorage = storage;
     this.mytoast = toast;
     TreeControlPage.initializeSceneData(this.myStorage);
+    this.initializeButtonInfo();
+    console.log(this.sceneButtonInfo);
+  }
+
+  isStepEnabled(sceneName){
+    return this.sceneButtonInfo.get(sceneName);
+  }
+  initializeButtonInfo(){
+    this.sceneButtonInfo = new Map();
+    // take sceneNameList and build list with disable/enabled status
+    TreeControlPage.sceneNameList.forEach(scenName => {
+      this.sceneButtonInfo.set(scenName, false);
+    });
+    this.sceneButtonInfo.set("step1", true);
+    
   }
 
   sceneNameList(){
@@ -104,21 +120,38 @@ export class TreeControlPage {
     });
 
   }
+
+  enableNextStepButton(stepName:string){
+    //disable current button
+    this.sceneButtonInfo.set(stepName, false);
+    let thisStepNumber= stepName.substr("step".length)
+    let nexStepNumber = Number.parseInt(thisStepNumber) + 1;
+    let nextSceneName = "step" + nexStepNumber;
+    //console.log("nextStep Numer " + nextSceneName);
+    if(this.sceneButtonInfo.has(nextSceneName)){
+      this.sceneButtonInfo.set(nextSceneName, true);
+    }else{
+      // if we hit the end set the first button back to enabled
+      this.sceneButtonInfo.set(TreeControlPage.sceneNameList[0], true);
+    }
+     
+  }
   moveForScene(event, sceneName) {
-    console.log("scenName=" + sceneName);
+    //console.log("scenName=" + sceneName);
+    this.enableNextStepButton(sceneName);
     this.myStorage.get(sceneName).then((scenedetails) => {
-      console.log(scenedetails);
+      //console.log(scenedetails);
       scenedetails.movements.forEach(movement => {
         if(movement.isDisabled==false){
          this.processMovement(movement);
         }
       });
     });
-    this.mytoast.show(`Step Instructions sent!!!`, '4000', 'center').subscribe(
-      toast => {
-        //console.log(toast);
-      }
-    );
+    // this.mytoast.show(`Step Instructions sent!!!`, '4000', 'center').subscribe(
+    //   toast => {
+    //     //console.log(toast);
+    //   }
+    // );
 
     
     

@@ -1,5 +1,10 @@
 page-tree-control {
 
     div.SpeedGroup{border-style: solid;}
+    div.SpeedGroup[disabled]{       
+        cursor: default;
+         opacity: .4;
+        pointer-events:none;
+    }
 
 }
