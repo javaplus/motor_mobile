@@ -14,7 +14,7 @@ export class TreeControlPage {
   lastDirection: string
   myStorage: Storage
   mytoast: Toast;
-  static sceneNameList = new Array("scene1", "scene2", "scene3", "scene4");
+  static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7","step8", "step9", "step10", "step11","step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21" );
   
 
   constructor(public httpClientParm: HttpClient, private storage: Storage, private toast: Toast) {
@@ -24,6 +24,10 @@ export class TreeControlPage {
     this.myStorage = storage;
     this.mytoast = toast;
     TreeControlPage.initializeSceneData(this.myStorage);
+  }
+
+  sceneNameList(){
+    return TreeControlPage.sceneNameList;
   }
 
   static initializeSceneData(myStorage){
@@ -37,8 +41,8 @@ export class TreeControlPage {
       });
       
     });
-    myStorage.set("motorURL1", "http://192.168.0.50:5000/move");
-    myStorage.set("motorURL2", "http://192.168.0.52:5000/move");
+    myStorage.set("motorURL2", "http://192.168.0.50:5000/move");
+    myStorage.set("motorURL1", "http://192.168.0.52:5000/move");
     myStorage.set("motorURL3", "http://192.168.0.54:5000/move");
     myStorage.set("motorURL4", "http://192.168.0.56:5000/move");
     myStorage.set("motorURL5", "http://192.168.0.58:5000/move");
@@ -101,6 +105,7 @@ export class TreeControlPage {
 
   }
   moveForScene(event, sceneName) {
+    console.log("scenName=" + sceneName);
     this.myStorage.get(sceneName).then((scenedetails) => {
       console.log(scenedetails);
       scenedetails.movements.forEach(movement => {

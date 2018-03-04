@@ -10,29 +10,13 @@
 
 <ion-content padding>
 <h3>Each button needs to hit in order because moves are relative to previous position </h3>
-  <div class="SpeedGroup">
+  <div class="SpeedGroup" *ngFor="let scene of sceneNameList()">
   <p>
-    <button ion-button color="primary" (click)="moveForScene($event,'scene1')">Scene 1</button>
+    <button ion-button color="primary" (click)="moveForScene($event,scene)">{{scene}}</button>
   </p>
 </div>
 <br>
-<div class="SpeedGroup">  
-  <p>
-    <button ion-button color="primary" (click)="moveForScene($event,'scene2')">Scene 2</button>
-  </p>
- </div> 
- <br>
- <div class="SpeedGroup">  
-  <p>
-    <button ion-button color="primary" (click)="moveForScene($event,'scene3')">Scene 3</button>
-  </p>
- </div> 
- <br>
- <div class="SpeedGroup">  
-  <p>
-    <button ion-button color="primary" (click)="moveForScene($event,'scene4')">Scene 4</button>
-  </p>
- </div> 
+
 
 
 </ion-content>

@@ -29,14 +29,24 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'Tree Control', component: TreeControlPage, context: "home" },
-      { title: 'Scene 1 Config', component: SceneDetailsPage, context: "scene1" },
-      { title: 'Scene 2 Config', component: SceneDetailsPage, context: "scene2" },
-      { title: 'Scene 3 Config', component: SceneDetailsPage, context: "scene3" },
-      { title: 'Scene 4 Config', component: SceneDetailsPage, context: "scene4" }
+      { title: 'Tree Control', component: TreeControlPage, context: "home" }
     ];
+    this.pages = this.initSceneConfig();
+  }
+  
+  initSceneConfig(){
+    let sceneStuff = [];
+    sceneStuff.push({title: 'Tree Control', component: TreeControlPage, context: "home"});
+
+    TreeControlPage.sceneNameList.forEach(sceneName => {
+      sceneStuff.push({title: sceneName + 'Config', component: SceneDetailsPage, context: sceneName});
+    });
+
+    return sceneStuff;
+    
   }
 
+  
   initializeApp() {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
