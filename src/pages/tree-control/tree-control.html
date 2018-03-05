@@ -9,13 +9,20 @@
 
 
 <ion-content padding>
-<h3>Each button needs to hit in order because moves are relative to previous position </h3>
+  <h3>Production Mode allows only one step active at a time </h3>
+  
   <div class="SpeedGroup" *ngFor="let scene of sceneNameList()" [attr.disabled]="isStepEnabled(scene)? null:true">
-  <p>
-    <button ion-button color="primary" (click)="moveForScene($event,scene)">{{scene}}</button>
-  </p>
-</div>
-<br>
+    <p>
+      <button ion-button color="primary" (click)="moveForScene($event,scene)">{{scene}}</button>
+    </p>
+  </div>
+  <div>
+    <ion-item>
+      <ion-label>Production Mode Enabled</ion-label>
+      <ion-checkbox [(ngModel)]="productionMode" checked="productionMode" (ionChange)="toggleModes()"></ion-checkbox>
+    </ion-item>
+  </div>
+  <br>
 
 
 

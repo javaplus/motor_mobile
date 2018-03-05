@@ -9,14 +9,15 @@ import { Toast } from '@ionic-native/toast';
   templateUrl: 'tree-control.html'
 })
 export class TreeControlPage {
-  httpClient : HttpClient;
+  httpClient: HttpClient;
   motorResponse: Observable<any>;
   lastDirection: string
   myStorage: Storage
   mytoast: Toast;
   sceneButtonInfo: Map<string, boolean>;
-  static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7","step8", "step9", "step10", "step11","step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21" );
-  
+  productionMode: boolean = true;
+  static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9", "step10", "step11", "step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21");
+
 
   constructor(public httpClientParm: HttpClient, private storage: Storage, private toast: Toast) {
     console.log("in TreeControl Page constructor");
@@ -25,37 +26,37 @@ export class TreeControlPage {
     this.myStorage = storage;
     this.mytoast = toast;
     TreeControlPage.initializeSceneData(this.myStorage);
-    this.initializeButtonInfo();
+    this.initializeButtonInfo(false);
     console.log(this.sceneButtonInfo);
   }
 
-  isStepEnabled(sceneName){
+  isStepEnabled(sceneName) {
     return this.sceneButtonInfo.get(sceneName);
   }
-  initializeButtonInfo(){
+  initializeButtonInfo(defaultValue:boolean) {
     this.sceneButtonInfo = new Map();
     // take sceneNameList and build list with disable/enabled status
     TreeControlPage.sceneNameList.forEach(scenName => {
-      this.sceneButtonInfo.set(scenName, false);
+      this.sceneButtonInfo.set(scenName, defaultValue);
     });
     this.sceneButtonInfo.set("step1", true);
-    
+
   }
 
-  sceneNameList(){
+  sceneNameList() {
     return TreeControlPage.sceneNameList;
   }
 
-  static initializeSceneData(myStorage){
+  static initializeSceneData(myStorage) {
     // try to get scene data
     TreeControlPage.sceneNameList.forEach(sceneName => {
-      myStorage.get(sceneName).then((sceneData)=>{
-        if(!sceneData){
+      myStorage.get(sceneName).then((sceneData) => {
+        if (!sceneData) {
           let sceneStuff = TreeControlPage.initMotorData(5);
-         myStorage.set(sceneName, sceneStuff);
+          myStorage.set(sceneName, sceneStuff);
         }
       });
-      
+
     });
     myStorage.set("motorURL2", "http://192.168.0.50:5000/move");
     myStorage.set("motorURL1", "http://192.168.0.52:5000/move");
@@ -64,122 +65,92 @@ export class TreeControlPage {
     myStorage.set("motorURL5", "http://192.168.0.58:5000/move");
   }
 
-  static initMotorData(numOfMotors){
-    let sceneStuff = {"movements":[]};
+  static initMotorData(numOfMotors) {
+    let sceneStuff = { "movements": [] };
 
     for (let index = 0; index < numOfMotors; index++) {
-      sceneStuff.movements[index] =     {
-        "motor": `${index+1}`,
-        "dir":"5",
-        "speed" : "255",
-        "time" : "13",
-        "isDisabled" : true
+      sceneStuff.movements[index] = {
+        "motor": `${index + 1}`,
+        "dir": "5",
+        "speed": "255",
+        "time": "13",
+        "isDisabled": true
       };
     }
     console.log(sceneStuff);
     return sceneStuff;
-    
-  }
-  test(event, name) {
-    // alert(name + " is super cool!");
-    this.motorResponse = this.httpClient.get('http://192.168.0.50:5000/test/' + name);
-    this.motorResponse
-    .subscribe(data => {
-      console.log('response=', data);
-      alert(data);
-    });
-
-  }
-  move(event, direction, speed) {
-    // alert(name + " is super cool!");
-    let dir = speed>0?direction:this.lastDirection; // set dir to last direction if speed is zero
-    let vector = dir + speed +'E';
-    this.motorResponse = this.httpClient.get('http://192.168.0.50:5000/forward/' + vector);
-    this.motorResponse
-    .subscribe(data => {
-      console.log('response=', data);
-      this.lastDirection = dir;
-    });
-
-  }
-  timedMove(event, direction, speed, time) {
-    // alert(name + " is super cool!");
-    let vector = {
-      "direction": direction,
-      "speed" : `${speed}`,
-      "time": time
-    }
-    let body = JSON.stringify(vector);
-    console.log(body);
-    this.motorResponse = this.httpClient.post('http://192.168.0.50:5000/move', body, {
-      headers: { 'Content-Type': 'application/json' }
-    });
-    this.motorResponse
-    .subscribe(data => {
-      console.log('response=', data);
-    });
 
   }
 
-  enableNextStepButton(stepName:string){
+
+  enableNextStepButton(stepName: string) {
     //disable current button
     this.sceneButtonInfo.set(stepName, false);
-    let thisStepNumber= stepName.substr("step".length)
+    let thisStepNumber = stepName.substr("step".length)
     let nexStepNumber = Number.parseInt(thisStepNumber) + 1;
     let nextSceneName = "step" + nexStepNumber;
     //console.log("nextStep Numer " + nextSceneName);
-    if(this.sceneButtonInfo.has(nextSceneName)){
+    if (this.sceneButtonInfo.has(nextSceneName)) {
       this.sceneButtonInfo.set(nextSceneName, true);
-    }else{
+    } else {
       // if we hit the end set the first button back to enabled
       this.sceneButtonInfo.set(TreeControlPage.sceneNameList[0], true);
     }
-     
+
   }
   moveForScene(event, sceneName) {
     //console.log("scenName=" + sceneName);
-    this.enableNextStepButton(sceneName);
+    if (this.productionMode) {
+      this.enableNextStepButton(sceneName);
+    }
     this.myStorage.get(sceneName).then((scenedetails) => {
       //console.log(scenedetails);
       scenedetails.movements.forEach(movement => {
-        if(movement.isDisabled==false){
-         this.processMovement(movement);
+        if (movement.isDisabled == false) {
+          this.processMovement(movement);
         }
       });
     });
-    // this.mytoast.show(`Step Instructions sent!!!`, '4000', 'center').subscribe(
-    //   toast => {
-    //     //console.log(toast);
-    //   }
-    // );
+    this.mytoast.show(`Step Instructions sent!!!`, '4000', 'center').subscribe(
+      toast => {
+        //console.log(toast);
+      }
+    );
 
-    
-    
   }
 
-  processMovement(movement){
+  processMovement(movement) {
     let vector = {
       "direction": movement.dir,
-      "speed" : `${movement.speed}`,
+      "speed": `${movement.speed}`,
       "time": movement.time
     }
     // get motor url then call API
     let body = JSON.stringify(vector);
     console.log(body);
     this.callMotorAPI(movement.motor, body);
-        
+
   }
 
-  callMotorAPI(motorNum, body){
+  callMotorAPI(motorNum, body) {
     let motorURL = "NA";
-    this.myStorage.get("motorURL"+motorNum).then((motorURL) => {
+    this.myStorage.get("motorURL" + motorNum).then((motorURL) => {
       this.httpClient.post(motorURL, body, {
         headers: { 'Content-Type': 'application/json' }
       }).subscribe(data => {
         console.log('response=', data);
       });
-   });
+    });
 
+  }
+
+  toggleModes($event){
+    console.log("Toggling modes");
+    if(this.productionMode){
+      this.initializeButtonInfo(false);
+    }else{
+      this.initializeButtonInfo(true);
+    }
   }
 
 }
