@@ -12,9 +12,11 @@
   <h3>Production Mode allows only one step active at a time </h3>
   
   <div class="SpeedGroup" *ngFor="let scene of sceneNameList()" [attr.disabled]="isStepEnabled(scene)? null:true">
+    <div *ngIf=isStepEnabled(scene)>
     <p>
       <button ion-button color="primary" (click)="moveForScene($event,scene)">{{scene}}</button>
     </p>
+  </div>
   </div>
   <div>
     <ion-item>
