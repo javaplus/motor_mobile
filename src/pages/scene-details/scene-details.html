@@ -9,6 +9,10 @@
 <ion-content>
   <h3>Choose the speed and time in Seconds to run. </h3>
   <div *ngIf="selectedScene">
+      <ion-item>
+          <ion-label color="primary">Note for {{sceneName}}</ion-label>
+          <ion-textarea [(ngModel)]="selectedScene.notes" placeholder="Notes Go Here"></ion-textarea>
+      </ion-item>
     <div class="SpeedGroup" *ngFor="let movement of selectedScene.movements" >
         <ion-item>
             <ion-label>Disabled</ion-label>

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-import { Toast } from '@ionic-native/toast';
+import {LoadingController} from 'ionic-angular';
 
 @Component({
   selector: 'page-tree-control',
@@ -13,33 +13,46 @@ export class TreeControlPage {
   motorResponse: Observable<any>;
   lastDirection: string
   myStorage: Storage
-  mytoast: Toast;
-  sceneButtonInfo: Map<string, boolean>;
+  sceneButtonInfo: Map<string, {enabled:boolean, notes:string}>;
   productionMode: boolean = true;
   static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9", "step10", "step11", "step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21");
   
-  constructor(public httpClientParm: HttpClient, private storage: Storage, private toast: Toast) {
+  constructor(public httpClientParm: HttpClient, private storage: Storage,public loadingCtrl: LoadingController) {
     console.log("in TreeControl Page constructor");
     this.httpClient = httpClientParm;
     this.lastDirection = '5';
     this.myStorage = storage;
-    this.mytoast = toast;
     TreeControlPage.initializeSceneData(this.myStorage);
     this.initializeButtonInfo(false);
     console.log(this.sceneButtonInfo);
   }
 
   isStepEnabled(sceneName) {
-    return this.sceneButtonInfo.get(sceneName);
+    var sceneinfo = this.sceneButtonInfo.get(sceneName);
+    if(sceneinfo!=undefined){
+        return sceneinfo.enabled;
+    }else{
+      return false;
+    }
   }
+
+  getStepDetails(stepName){
+    return this.sceneButtonInfo.get(stepName);
+  }
+
   initializeButtonInfo(defaultValue:boolean) {
     this.sceneButtonInfo = new Map();
     // take sceneNameList and build list with disable/enabled status
-    TreeControlPage.sceneNameList.forEach(scenName => {
-      this.sceneButtonInfo.set(scenName, defaultValue);
+    TreeControlPage.sceneNameList.forEach(sceneName => {
+      this.myStorage.get(sceneName).then(sceneInfo=>{
+        if(sceneName!="step1"){
+          this.sceneButtonInfo.set(sceneName, {enabled:defaultValue,notes:sceneInfo.notes});
+        }else{
+          this.sceneButtonInfo.set(sceneName, {enabled:true,notes:sceneInfo.notes});
+        }
+      });
+      
     });
-    this.sceneButtonInfo.set("step1", true);
-
   }
 
   sceneNameList() {
@@ -65,7 +78,7 @@ export class TreeControlPage {
   }
 
   static initMotorData(numOfMotors) {
-    let sceneStuff = { "movements": [] };
+    let sceneStuff = { "movements": [], "notes":""};
 
     for (let index = 0; index < numOfMotors; index++) {
       sceneStuff.movements[index] = {
@@ -84,20 +97,21 @@ export class TreeControlPage {
 
   enableNextStepButton(stepName: string) {
     //disable current button
-    this.sceneButtonInfo.set(stepName, false);
+    this.sceneButtonInfo.get(stepName).enabled=false;
     let thisStepNumber = stepName.substr("step".length)
     let nexStepNumber = Number.parseInt(thisStepNumber) + 1;
     let nextSceneName = "step" + nexStepNumber;
     //console.log("nextStep Numer " + nextSceneName);
     if (this.sceneButtonInfo.has(nextSceneName)) {
-      this.sceneButtonInfo.set(nextSceneName, true);
+      this.sceneButtonInfo.get(nextSceneName).enabled=true;
     } else {
       // if we hit the end set the first button back to enabled
-      this.sceneButtonInfo.set(TreeControlPage.sceneNameList[0], true);
+      this.sceneButtonInfo.get(TreeControlPage.sceneNameList[0]).enabled = true;
     }
 
   }
   moveForScene(event, sceneName) {
+    this.presentLoadingCircles();
     //console.log("scenName=" + sceneName);
     if (this.productionMode) {
       this.enableNextStepButton(sceneName);
@@ -110,12 +124,21 @@ export class TreeControlPage {
         }
       });
     });
-    this.mytoast.show(`Step Instructions sent!!!`, '4000', 'center').subscribe(
-      toast => {
-        //console.log(toast);
-      }
-    );
 
+  }
+
+  presentLoadingCircles() {
+    let loading = this.loadingCtrl.create({
+      spinner: 'circles',
+      content: 'Moving Props Now... Please wait till all movement completes before clicking next step...',
+      duration: 3000
+    });
+
+    loading.present();
+
+    setTimeout(() => {
+      loading.dismiss();
+    }, 5000);
   }
 
   processMovement(movement) {
@@ -150,6 +173,12 @@ export class TreeControlPage {
     }else{
       this.initializeButtonInfo(true);
     }
+  }
+
+  getNotesForStepName(stepName){
+    this.myStorage.get(stepName).then(value=>{
+
+    });
   }
 
 }

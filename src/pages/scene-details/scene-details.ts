@@ -38,7 +38,6 @@ export class SceneDetailsPage {
     console.log(this.selectedScene);
     // let's write the updates back to storage.
     this.myStorage.set(this.sceneName, this.selectedScene);
-    //this.mytoast.show("Settings Saved!!!", 'long', 'center');
     this.mytoast.show(this.sceneName +` Settings Saved!!!`, '4000', 'center').subscribe(
       toast => {
         //console.log(toast);
