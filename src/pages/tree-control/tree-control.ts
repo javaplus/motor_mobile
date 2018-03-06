@@ -9,19 +9,16 @@ import {LoadingController} from 'ionic-angular';
   templateUrl: 'tree-control.html'
 })
 export class TreeControlPage {
-  httpClient: HttpClient;
   motorResponse: Observable<any>;
   lastDirection: string
-  myStorage: Storage
   sceneButtonInfo: Map<string, {enabled:boolean, notes:string}>;
   productionMode: boolean = true;
   static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9", "step10", "step11", "step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21");
   
-  constructor(public httpClientParm: HttpClient, private storage: Storage,public loadingCtrl: LoadingController) {
+  constructor(private httpClient: HttpClient, private myStorage: Storage,private loadingCtrl: LoadingController) {
     console.log("in TreeControl Page constructor");
-    this.httpClient = httpClientParm;
     this.lastDirection = '5';
-    this.myStorage = storage;
+    //this.myStorage = storage;
     TreeControlPage.initializeSceneData(this.myStorage);
     this.initializeButtonInfo(false);
     console.log(this.sceneButtonInfo);
@@ -130,7 +127,7 @@ export class TreeControlPage {
   presentLoadingCircles() {
     let loading = this.loadingCtrl.create({
       spinner: 'circles',
-      content: 'Moving Props Now... Please wait till all movement completes before clicking next step...',
+      content: 'Moving Props Now... Please wait till all movement stops before clicking next step...',
       duration: 3000
     });
 
