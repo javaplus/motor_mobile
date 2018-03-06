@@ -12,13 +12,17 @@ export class TreeControlPage {
   motorResponse: Observable<any>;
   sceneButtonInfo: Map<string, {enabled:boolean, notes:string}>;
   productionMode: boolean = true;
+  currentScene: string = null;
   static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9", "step10", "step11", "step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21");
   
   constructor(private httpClient: HttpClient, private myStorage: Storage,private loadingCtrl: LoadingController) {
     console.log("in TreeControl Page constructor");
     //this.myStorage = storage;
     TreeControlPage.initializeSceneData(this.myStorage);
-    this.initializeButtonInfo(false);
+    if(this.currentScene==null){
+      this.initializeButtonInfo(false, "step1");
+      this.currentScene = "step1";
+    }
     console.log(this.sceneButtonInfo);
   }
 
@@ -35,12 +39,12 @@ export class TreeControlPage {
     return this.sceneButtonInfo.get(stepName);
   }
 
-  initializeButtonInfo(defaultValue:boolean) {
+  initializeButtonInfo(defaultValue:boolean, selectedScene:string) {
     this.sceneButtonInfo = new Map();
     // take sceneNameList and build list with disable/enabled status
     TreeControlPage.sceneNameList.forEach(sceneName => {
       this.myStorage.get(sceneName).then(sceneInfo=>{
-        if(sceneName!="step1"){
+        if(sceneName!=selectedScene){
           this.sceneButtonInfo.set(sceneName, {enabled:defaultValue,notes:sceneInfo.notes});
         }else{
           this.sceneButtonInfo.set(sceneName, {enabled:true,notes:sceneInfo.notes});
@@ -91,26 +95,29 @@ export class TreeControlPage {
 
 
   enableNextStepButton(stepName: string) {
-    //disable current button
-    this.sceneButtonInfo.get(stepName).enabled=false;
+    if(this.productionMode){
+      //disable current button
+      this.sceneButtonInfo.get(stepName).enabled=false;
+    }
     let thisStepNumber = stepName.substr("step".length)
     let nexStepNumber = Number.parseInt(thisStepNumber) + 1;
     let nextSceneName = "step" + nexStepNumber;
     //console.log("nextStep Numer " + nextSceneName);
     if (this.sceneButtonInfo.has(nextSceneName)) {
       this.sceneButtonInfo.get(nextSceneName).enabled=true;
+      this.currentScene=nextSceneName;
     } else {
       // if we hit the end set the first button back to enabled
       this.sceneButtonInfo.get(TreeControlPage.sceneNameList[0]).enabled = true;
+      this.currentScene="step1";
     }
 
   }
   moveForScene(event, sceneName) {
     this.presentLoadingCircles();
     //console.log("scenName=" + sceneName);
-    if (this.productionMode) {
-      this.enableNextStepButton(sceneName);
-    }
+    this.enableNextStepButton(sceneName);
+    
     this.myStorage.get(sceneName).then((scenedetails) => {
       //console.log(scenedetails);
       scenedetails.movements.forEach(movement => {
@@ -164,9 +171,10 @@ export class TreeControlPage {
   toggleModes($event){
     console.log("Toggling modes");
     if(this.productionMode){
-      this.initializeButtonInfo(false);
+      console.log("currentscene=" + this.currentScene);
+      this.initializeButtonInfo(false, this.currentScene);
     }else{
-      this.initializeButtonInfo(true);
+      this.initializeButtonInfo(true, null);
     }
   }
 
