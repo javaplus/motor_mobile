@@ -10,13 +10,48 @@
 
 <ion-content padding>
   <h3>Production Mode allows only one step active at a time </h3>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Motor1</ion-label>
+          <ion-checkbox [(ngModel)]="motor1Response" checked="motor1Response" disabled="false" ></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label>Motor2</ion-label>
+          <ion-checkbox [(ngModel)]="motor2Response" checked="motor2Response" disabled="false"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item>
+          <ion-label>Motor3</ion-label>
+          <ion-checkbox [(ngModel)]="motor3Response" checked="motor2Response" disabled="false"></ion-checkbox>
+        </ion-item>
+      </ion-col>
 
+      <ion-col>
+        <ion-item>
+          <ion-label>Motor4</ion-label>
+          <ion-checkbox [(ngModel)]="motor4Response" checked="motor2Response" disabled="false"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+
+      <ion-col>
+        <ion-item>
+          <ion-label>Motor5</ion-label>
+          <ion-checkbox [(ngModel)]="motor5Response" checked="motor2Response" disabled="false"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <div class="SpeedGroup" *ngFor="let scene of sceneNameList()" [attr.disabled]="isStepEnabled(scene)? null:true">
     <div *ngIf=isStepEnabled(scene)>
       <div>
         <p>
           <button ion-button color="primary" (click)="moveForScene($event,scene)">{{scene}}</button>
-            {{getStepDetails(scene).notes}}
+          {{getStepDetails(scene).notes}}
         </p>
       </div>
     </div>

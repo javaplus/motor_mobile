@@ -12,6 +12,13 @@ export class TreeControlPage {
   motorResponse: Observable<any>;
   sceneButtonInfo: Map<string, {enabled:boolean, notes:string}>;
   productionMode: boolean = true;
+  motor1Response: boolean = false;
+  motor2Response: boolean = false;
+  motor3Response: boolean = false;
+  motor4Response: boolean = false;
+  motor5Response: boolean = false;
+
+
   currentScene: string = null;
   static sceneNameList = new Array("step1", "step2", "step3", "step4", "step5", "step6", "step7", "step8", "step9", "step10", "step11", "step12", "step13", "step14", "step15", "step16", "step17", "step18", "step19", "step20", "step21");
   
@@ -115,6 +122,7 @@ export class TreeControlPage {
   }
   moveForScene(event, sceneName) {
     this.presentLoadingCircles();
+    this.clearMotorStatus();
     //console.log("scenName=" + sceneName);
     this.enableNextStepButton(sceneName);
     
@@ -143,6 +151,16 @@ export class TreeControlPage {
     }, 5000);
   }
 
+  clearMotorStatus(){
+
+    this.motor1Response = false;
+    this.motor2Response = false;
+    this.motor3Response = false;
+    this.motor4Response = false;
+    this.motor5Response = false;
+
+  }
+
   processMovement(movement) {
     let vector = {
       "direction": movement.dir,
@@ -151,7 +169,7 @@ export class TreeControlPage {
     }
     // get motor url then call API
     let body = JSON.stringify(vector);
-    console.log(body);
+    console.log(movement);
     this.callMotorAPI(movement.motor, body);
 
   }
@@ -162,12 +180,37 @@ export class TreeControlPage {
       this.httpClient.post(motorURL, body, {
         headers: { 'Content-Type': 'application/json' }
       }).subscribe(data => {
-        console.log('response=', data);
-      });
+        this.setMotorResponse(motorNum, data);    
+        console.log('response=' + motorNum, data);
+      },
+        error=>{
+          console.log("error", error)
+        });
     });
 
   }
 
+  setMotorResponse(motornum, response){
+    switch (motornum){
+      case "1":
+        this.motor1Response = true;
+        break;
+      case "2":
+        this.motor2Response = true;
+        break;
+      case "3":
+        this.motor3Response = true;
+        break;
+      case "4":
+        this.motor4Response = true;
+        break;
+      case "5":
+        this.motor5Response = true;
+        break;
+    }
+
+
+  }
   toggleModes($event){
     console.log("Toggling modes");
     if(this.productionMode){
